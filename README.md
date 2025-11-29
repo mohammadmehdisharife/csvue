@@ -15,4 +15,4 @@ To install the software, download the latest stable version from the `Release` s
 
 ## Participate
 Create a branch, develop and submit a pull request.
-I will review all requests. No prior coordination is required. It is better to read the tasks you want to do from the [TODO]("./TODO") list.
+I will review all requests. No prior coordination is required. It is better to read the tasks you want to do from the [TODO](./TODO) list.
