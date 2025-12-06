@@ -1,64 +1,54 @@
 #include <stdio.h>
 #include <string.h>
+#include "./terminal.h"
 
-void print_spaces(int count) {
-    for (int i = 0; i < count; i++) {
-        printf(" ");
-    }
-}
+#define DELIMITER ","
 
 int main(int argc, char *argv[])
 {
-  if (argc != 2) {
-    fprintf(stderr, "using: %s <filename>\n",argv[0]);
-  }
-
-  FILE *file;
-  file = fopen(argv[1],"r");
-  if (file == NULL) {
-    fprintf(stderr, "Failed to open file %s.\n",argv[1]);
-    return 1;
-  }
-
-  char *cell;
-  char buffer[1024];
-  int first_line = 1;
-  int col_count = 1;
-
-  while ((fgets(buffer, sizeof(buffer), file)) != NULL) {
-
-    cell = strtok(buffer,",");
-    int total_spaces = 16 - strlen(cell);
-    int left_spaces = total_spaces / 2;
-    int right_spaces = total_spaces - left_spaces;
-
-    print_spaces(left_spaces);
-    printf("%s", cell);
-    print_spaces(right_spaces);
-
-    while((cell = strtok(NULL,",")) != NULL) {
-
-      int total_spaces = 16 - strlen(cell);
-      int left_spaces = total_spaces / 2;
-      int right_spaces = total_spaces - left_spaces;
-
-      print_spaces(left_spaces);
-      printf("%s", cell);
-      print_spaces(right_spaces);
-
-      col_count = col_count + 1;
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s <filename>\n", argv[0]);
+        return 1;
     }
 
-    if (first_line == 1) {
-      for (int i = 0; i < col_count; i++) {
-        printf(" -------------- ");
-      }
-      printf("\n");
-      first_line = 0;
+    FILE *file;
+    file = fopen(argv[1], "r");
+    if (file == NULL) {
+        fprintf(stderr, "open file failed\n");
+        return 1;
     }
-  }
 
-  printf("\n");
-  fclose(file);
-  return 0;
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        int token_count = 0;
+        char line[1024];
+        char *token;
+
+        token = strtok(buffer, DELIMITER);
+        if (token == NULL) {
+            continue;
+        }
+        strcpy(line, token);
+        strcat(line, ",");
+        token_count++;
+        
+        while ((token = strtok(NULL, DELIMITER)) != NULL) {
+            strcat(line, token);
+            strcat(line, ",");
+            token_count++;
+        }
+
+        int width = get_terminal_width();
+        int space_width = (width - strlen(line) + token_count) / (token_count + 1);
+        char space[1024] = " ";
+        for (int count = 1;space_width > count;count++) {
+            strcat(space, " ");
+        }
+
+        printf("%s%s",space,strtok(line,DELIMITER));
+        while ((token = strtok(NULL, DELIMITER)) != NULL) {
+            printf("%s%s",space,token);
+        }
+    }
+    return 0;
 }

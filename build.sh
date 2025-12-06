@@ -1,1 +1,1 @@
-gcc csvue.c -o csvue
+gcc csvue.c terminal.c -o csvue
