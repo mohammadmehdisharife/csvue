@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
             }
             
             if (col < col_count - 1) {
-                printf(" | ");
+                printf(" │ ");
             }
         }
         printf("\n");
@@ -143,10 +143,10 @@ int main(int argc, char *argv[])
         if (row == 0) {
             for (int col = 0; col < col_count; col++) {
                 for (int i = 0; i < col_widths[col]; i++) {
-                    printf("-");
+                    printf("─");
                 }
                 if (col < col_count - 1) {
-                    printf("-+-");
+                    printf("─┼─");
                 }
             }
             printf("\n");
